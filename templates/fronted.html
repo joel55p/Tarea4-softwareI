@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tareas por hacer </title> 
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> <!-- Esta es la direccion de donde se descarga Alpine.js-->
+</head>
+<body>
+
+
+  <div x-data="{ tareas: [], nueva: '' }" x-init="fetch('/tareas')    
+      .then(r => r.json()).then(d => tareas = d)"> <!--  lo que va a manejar este div son datos -->
+
+      <!-- se va a crear tareas una lista vacia y tambien el mensaje vacio para luego agregarle algo -->
+
+
+      <!-- Luego  con el fetch va servidor flask donde obtiene los datos
+      luego los transforma en JSON y finalmente guarda en variable tareas -->
+
+
+    <ul>   <!-- Este ul actua como un for-->
+      <template x-for="tarea in tareas" :key="tarea"> <!-- por cada tarea en la lista, crea un elemento-->
+        <li x-text="tarea"></li>  <!--muestra el texto de esa tarea como un item de lista-->
+      </template>
+    </ul>
+
+    <!-- recuadro donde se guarda la info -->
+    <input x-model="nueva" placeholder="Nueva tarea">  <!-- significa que todo lo que el usuario escriba se guarda automáticamente en la variable nueva en tiempo real-->
+    <button @click="tareas.push(nueva); nueva=''">Agregar</button>
+    <!-- leugo de hacer el click  agrega lo que esta en la var "nueva" a la lista de tareas  y luego se limpia el campo de texto para que quede vacío de nuevo-->
+  </div>
+
+</body>
+</html>
