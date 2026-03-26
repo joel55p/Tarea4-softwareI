@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tareas por hacer </title> 
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> <!-- Esta es la direccion de donde se descarga Alpine.js-->
+    <title>Tareas por hacer</title>
+    <!-- Carga Alpine.js, defer espera a que el HTML esté listo -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body>
 
+  <!-- PATRON MVVM - VIEWMODEL: Alpine conecta los datos con la interfaz -->
+  <!-- PATRON OBSERVER: Alpine vigila los datos y actualiza la pantalla sola -->
+  <div x-data="{ tareas: [], nueva: '' }" 
+       x-init="fetch('/tareas').then(r => r.json()).then(d => tareas = d)">
+       <!-- x-data declara los datos | x-init pide las tareas a Flask al cargar -->
 
-  <div x-data="{ tareas: [], nueva: '' }" x-init="fetch('/tareas')    
-      .then(r => r.json()).then(d => tareas = d)"> <!--  lo que va a manejar este div son datos -->
-
-      <!-- se va a crear tareas una lista vacia y tambien el mensaje vacio para luego agregarle algo -->
-
-
-      <!-- Luego  con el fetch va servidor flask donde obtiene los datos
-      luego los transforma en JSON y finalmente guarda en variable tareas -->
-
-
-    <ul>   <!-- Este ul actua como un for-->
-      <template x-for="tarea in tareas" :key="tarea"> <!-- por cada tarea en la lista, crea un elemento-->
-        <li x-text="tarea"></li>  <!--muestra el texto de esa tarea como un item de lista-->
+    <ul>
+      <!-- PATRON OBSERVER: si tareas cambia, esta lista se actualiza sola -->
+      <template x-for="tarea in tareas" :key="tarea">
+        <!-- PATRÓN MVVM - VIEW: solo muestra los datos, no los modifica -->
+        <li x-text="tarea"></li>
       </template>
     </ul>
 
-    <!-- recuadro donde se guarda la info -->
-    <input x-model="nueva" placeholder="Nueva tarea">  <!-- significa que todo lo que el usuario escriba se guarda automáticamente en la variable nueva en tiempo real-->
+    <!-- PATRON MVVM - VIEWMODEL + OBSERVER: x-model sincroniza el input con la variable nueva -->
+    <input x-model="nueva" placeholder="Nueva tarea">
+
+    <!-- PATRON OBSERVER: al hacer click modifica tareas y Alpine actualiza la pantalla -->
     <button @click="tareas.push(nueva); nueva=''">Agregar</button>
-    <!-- leugo de hacer el click  agrega lo que esta en la var "nueva" a la lista de tareas  y luego se limpia el campo de texto para que quede vacío de nuevo-->
+
   </div>
 
 </body>
